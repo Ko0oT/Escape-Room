@@ -1,43 +1,11 @@
 import React from 'react';
+import Footer from '../../components/footer/footer';
+import Header from '../../components/header/header';
 
 function Login() {
   return (
     <div className="wrapper">
-      <header className="header">
-        <div className="container container--size-l">
-          <a
-            className="logo header__logo"
-            href="index.html"
-            aria-label="Перейти на Главную"
-          >
-            <svg width={134} height={52} aria-hidden="true">
-              <use xlinkHref="#logo" />
-            </svg>
-          </a>
-          <nav className="main-nav header__main-nav">
-            <ul className="main-nav__list">
-              <li className="main-nav__item">
-                <a className="link not-disabled active" href="index.html">
-                  Квесты
-                </a>
-              </li>
-              <li className="main-nav__item">
-                <a className="link" href="contacts.html">
-                  Контакты
-                </a>
-              </li>
-            </ul>
-          </nav>
-          <div className="header__side-nav">
-            <a
-              className="link header__side-item header__phone-link"
-              href="tel:88003335599"
-            >
-              8 (000) 111-11-11
-            </a>
-          </div>
-        </div>
-      </header>
+      <Header/>
       <main className="decorated-page login">
         <div className="decorated-page__decor" aria-hidden="true">
           <picture>
@@ -109,8 +77,11 @@ function Login() {
                   </svg>
                 </span>
                 <span className="custom-checkbox__label">
-                  Я&nbsp;согласен с
-                  <a className="link link--active-silver link--underlined" href="#">
+                  Я&nbsp;согласен с&nbsp;
+                  <a
+                    className="link link--active-silver link--underlined"
+                    href="#"
+                  >
                     правилами обработки персональных данных
                   </a>
                   &nbsp;и пользовательским соглашением
@@ -120,66 +91,7 @@ function Login() {
           </div>
         </div>
       </main>
-      <footer className="footer">
-        <div className="container container--size-l">
-          <div className="socials">
-            <ul className="socials__list">
-              <li className="socials__item">
-                <a
-                  className="socials__link"
-                  href="#"
-                  aria-label="Skype"
-                  target="_blank"
-                  rel="nofollow noopener noreferrer"
-                >
-                  <svg
-                    className="socials__icon socials__icon--default"
-                    width={28}
-                    height={28}
-                    aria-hidden="true"
-                  >
-                    <use xlinkHref="#icon-skype-default" />
-                  </svg>
-                  <svg
-                    className="socials__icon socials__icon--interactive"
-                    width={28}
-                    height={28}
-                    aria-hidden="true"
-                  >
-                    <use xlinkHref="#icon-skype-interactive" />
-                  </svg>
-                </a>
-              </li>
-              <li className="socials__item">
-                <a
-                  className="socials__link"
-                  href="#"
-                  aria-label="ВКонтакте"
-                  target="_blank"
-                  rel="nofollow noopener noreferrer"
-                >
-                  <svg
-                    className="socials__icon socials__icon--default"
-                    width={28}
-                    height={28}
-                    aria-hidden="true"
-                  >
-                    <use xlinkHref="#icon-vk-default" />
-                  </svg>
-                  <svg
-                    className="socials__icon socials__icon--interactive"
-                    width={28}
-                    height={28}
-                    aria-hidden="true"
-                  >
-                    <use xlinkHref="#icon-vk-interactive" />
-                  </svg>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </footer>
+      <Footer/>
     </div>
   );
 }
