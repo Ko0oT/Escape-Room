@@ -1,36 +1,41 @@
 /* eslint-disable no-console */
+import { LeafletMouseEvent } from 'leaflet';
 import { useState, ChangeEvent } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router-dom';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
+import Map from '../../components/map/map';
 import TimeInput from '../../components/time-input/time-input';
 import { bookingInfo, someQuest as quest } from '../../mocks/data';
+import { FormData, Location } from '../../types/types';
+import { QuestDate } from './../../constants';
+// import { useForm } from 'react-hook-form';
 //данные берутся из 2х запросов сразу
 
 function Booking() {
   const {id} = useParams();
-  console.log(id);
 
-  const initialFormState = {
-    date: '',
+  const initialFormState: FormData = {
+    date: undefined,
     time: '',
     contactPerson: '',
     phone: '',
     withChildren: true,
-    peopleCount: '',
+    peopleCount: undefined,
     locationId: undefined,
-    questId: id
+    questId: Number(id)
   };
 
-  const [formData, setFormData] = useState(initialFormState);
+  const [location, setLocation] = useState<Location | undefined>(undefined);
+  const [formData, setFormData] = useState<FormData>(initialFormState);
   const [agreementCheckboxChecked, setAgreementCheckboxChecked] = useState(false);
   // const [formIsValid, setFormIsValid] = useState(false); TODO доделать валидацию
 
   const handleTimeInputChange = ({target}: ChangeEvent<HTMLInputElement>): void => {
     setFormData({
       ...formData,
-      date: target.id,
+      date: target.id as keyof typeof QuestDate,
       time: target.value,
     });
   };
@@ -44,7 +49,18 @@ function Booking() {
     });
   };
 
-  console.log(formData);
+  const handleSelectedMarkerChange = ({latlng}: LeafletMouseEvent) => {
+    const checkedLocation: Location | undefined = bookingInfo.locations.find((it) => it.coords[0] === latlng.lat && it.coords[1] === latlng.lng);
+    setFormData({
+      ...formData,
+      locationId: checkedLocation?.id,
+    });
+    setLocation(checkedLocation as Location);
+  };
+
+  // const onSubmit = (evt) => evt.preventDefault();
+  // const { register, handleSubmit } = useForm();
+
 
   return (
     <div className="wrapper">
@@ -79,15 +95,17 @@ function Booking() {
           <div className="page-content__item">
             <div className="booking-map">
               <div className="map">
-                <div className="map__container" />
+                <div className="map__container">
+                  <Map locations={bookingInfo.locations} handleSelectedMarkerChange={handleSelectedMarkerChange} selectedLocationId={location?.id}/>
+                </div>
               </div>
               <p className="booking-map__address">
-                Вы&nbsp;выбрали: {bookingInfo.locations[0].address}
-                {/* TODO сделать в зависимости от выбранной координаты на карте */}
+                Вы&nbsp;выбрали: {location?.address}
               </p>
             </div>
           </div>
           <form
+            // onSubmit={handleSubmit(onSubmit)}
             className="booking-form"
             action="https://echo.htmlacademy.ru/"
             method="post"

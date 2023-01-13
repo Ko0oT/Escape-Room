@@ -1,9 +1,10 @@
+import { LatLngTuple } from 'leaflet';
 import {DifficultyLevel, QuestDate, QuestGenre} from './../constants';
 
 export type Location = {
   id: number;
   address: string;
-  coords: number[];
+  coords: LatLngTuple;
 }
 
 export type Quest = {
@@ -53,4 +54,15 @@ export type BookingInfo = {
   id: number;
   locations: Location[];
   slots: Slots;
+}
+
+export type FormData = {
+  date: 'today' | 'tomorrow' | undefined;
+  time: string;
+  contactPerson: string;
+  phone: string;
+  withChildren: boolean;
+  peopleCount: number | undefined;
+  locationId: number | undefined;
+  questId: number;
 }

@@ -11,7 +11,7 @@ function NotFound() {
       <Helmet>
         <title>Страница не найдена - Escape Room</title>
       </Helmet>
-      <h1 style={style}>Страница не найдена</h1>
+      <h1 style={style}>404 Not Found</h1>
       <Link className='locations__item-link' style={style} to='/'>Вернуться на главную</Link>
     </>
   );

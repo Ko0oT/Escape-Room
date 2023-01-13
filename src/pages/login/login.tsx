@@ -3,6 +3,9 @@ import { Helmet } from 'react-helmet-async';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
 
+//Страница доступна только неавторизованным пользователям. Если пользователь уже авторизован и попытается попасть на страницу входа, его перекинет на главную страницу каталога квестов.
+//TODO
+
 function Login() {
   return (
     <div className="wrapper">
