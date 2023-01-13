@@ -3,10 +3,14 @@ import QuestCard from '../../components/quest-card/quest-card';
 import Header from '../../components/header/header';
 import { quests } from './../../mocks/data';
 import Footer from '../../components/footer/footer';
+import { Helmet } from 'react-helmet-async';
 
 function Main() {
   return (
     <div className="wrapper">
+      <Helmet>
+        <title>Escape Room</title>
+      </Helmet>
       <Header />
       <main className="page-content">
         <div className="container">

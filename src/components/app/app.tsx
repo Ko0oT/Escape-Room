@@ -7,50 +7,53 @@ import Quest from '../../pages/quest/quest';
 import PrivateRoute from '../private-route/private-route';
 import NotFound from '../../pages/not-found/not-found';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 
 function App(): JSX.Element {
   const hasAccess = true;
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path='/'
-          element={<Main />}
-        />
-        <Route
-          path='/login'
-          element={<Login />}
-        />
-        <Route
-          path='/quest/:id'
-          element={<Quest />}
-        />
-        <Route
-          path='/about'
-          element={<Contacts />}
-        />
-        <Route
-          path='/quest/:id/booking'
-          element={
-            <PrivateRoute hasAccess={hasAccess}>
-              <Booking />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path='/my-quests'
-          element={
-            <PrivateRoute hasAccess={hasAccess}>
-              <MyQuests />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path='*'
-          element={<NotFound />}
-        />
-      </Routes>
-    </BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path='/'
+            element={<Main />}
+          />
+          <Route
+            path='/login'
+            element={<Login />}
+          />
+          <Route
+            path='/quest/:id'
+            element={<Quest />}
+          />
+          <Route
+            path='/about'
+            element={<Contacts />}
+          />
+          <Route
+            path='/quest/:id/booking'
+            element={
+              <PrivateRoute hasAccess={hasAccess}>
+                <Booking />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/my-quests'
+            element={
+              <PrivateRoute hasAccess={hasAccess}>
+                <MyQuests />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='*'
+            element={<NotFound />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }
 

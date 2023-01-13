@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
 function NotFound() {
@@ -7,8 +8,11 @@ function NotFound() {
 
   return (
     <>
-      <h1 style={style}>404 Not Found</h1>
-      <Link className='locations__item-link' style={style} to='/'>Back to the main page</Link>
+      <Helmet>
+        <title>Страница не найдена - Escape Room</title>
+      </Helmet>
+      <h1 style={style}>Страница не найдена</h1>
+      <Link className='locations__item-link' style={style} to='/'>Вернуться на главную</Link>
     </>
   );
 }

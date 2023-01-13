@@ -1,21 +1,66 @@
-import React from 'react';
+/* eslint-disable no-console */
+import { useState, ChangeEvent } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { useParams } from 'react-router-dom';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
+import TimeInput from '../../components/time-input/time-input';
+import { bookingInfo, someQuest as quest } from '../../mocks/data';
+//данные берутся из 2х запросов сразу
 
 function Booking() {
+  const {id} = useParams();
+  console.log(id);
+
+  const initialFormState = {
+    date: '',
+    time: '',
+    contactPerson: '',
+    phone: '',
+    withChildren: true,
+    peopleCount: '',
+    locationId: undefined,
+    questId: id
+  };
+
+  const [formData, setFormData] = useState(initialFormState);
+  const [agreementCheckboxChecked, setAgreementCheckboxChecked] = useState(false);
+  // const [formIsValid, setFormIsValid] = useState(false); TODO доделать валидацию
+
+  const handleTimeInputChange = ({target}: ChangeEvent<HTMLInputElement>): void => {
+    setFormData({
+      ...formData,
+      date: target.id,
+      time: target.value,
+    });
+  };
+
+  const handleFieldChange = ({target}: ChangeEvent<HTMLInputElement>): void => {
+    const {name} = target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  console.log(formData);
+
   return (
     <div className="wrapper">
+      <Helmet>
+        <title>Бронирование квеста - Escape Room</title>
+      </Helmet>
       <Header/>
       <main className="page-content decorated-page">
         <div className="decorated-page__decor" aria-hidden="true">
           <picture>
             <source
               type="image/webp"
-              srcSet="img/content/maniac/maniac-bg-size-m.webp, img/content/maniac/maniac-bg-size-m@2x.webp 2x"
+              srcSet={quest.coverImgWebp}
             />
             <img
-              src="img/content/maniac/maniac-bg-size-m.jpg"
-              srcSet="img/content/maniac/maniac-bg-size-m@2x.jpg 2x"
+              src={quest.coverImg}
               width={1366}
               height={1959}
               alt=""
@@ -28,7 +73,7 @@ function Booking() {
               Бронирование квеста
             </h1>
             <p className="title title--size-m title--uppercase page-content__title">
-              Маньяк
+              {quest.title}
             </p>
           </div>
           <div className="page-content__item">
@@ -37,8 +82,8 @@ function Booking() {
                 <div className="map__container" />
               </div>
               <p className="booking-map__address">
-                Вы&nbsp;выбрали: наб. реки Карповки&nbsp;5, лит&nbsp;П, м.
-                Петроградская
+                Вы&nbsp;выбрали: {bookingInfo.locations[0].address}
+                {/* TODO сделать в зависимости от выбранной координаты на карте */}
               </p>
             </div>
           </div>
@@ -52,115 +97,13 @@ function Booking() {
               <fieldset className="booking-form__date-section">
                 <legend className="booking-form__date-title">Сегодня</legend>
                 <div className="booking-form__date-inner-wrapper">
-                  <label className="custom-radio booking-form__date">
-                    <input
-                      type="radio"
-                      id="today9h45m"
-                      name="date"
-                      required
-                      defaultValue="today9h45m"
-                    />
-                    <span className="custom-radio__label">9:45</span>
-                  </label>
-                  <label className="custom-radio booking-form__date">
-                    <input
-                      type="radio"
-                      id="today15h00m"
-                      name="date"
-                      defaultChecked
-                      required
-                      defaultValue="today15h00m"
-                    />
-                    <span className="custom-radio__label">15:00</span>
-                  </label>
-                  <label className="custom-radio booking-form__date">
-                    <input
-                      type="radio"
-                      id="today17h30m"
-                      name="date"
-                      required
-                      defaultValue="today17h30m"
-                    />
-                    <span className="custom-radio__label">17:30</span>
-                  </label>
-                  <label className="custom-radio booking-form__date">
-                    <input
-                      type="radio"
-                      id="today19h30m"
-                      name="date"
-                      required
-                      defaultValue="today19h30m"
-                      disabled
-                    />
-                    <span className="custom-radio__label">19:30</span>
-                  </label>
-                  <label className="custom-radio booking-form__date">
-                    <input
-                      type="radio"
-                      id="today21h30m"
-                      name="date"
-                      required
-                      defaultValue="today21h30m"
-                    />
-                    <span className="custom-radio__label">21:30</span>
-                  </label>
+                  {bookingInfo.slots.today.map((it) => <TimeInput date='today' data={it} key={it.time} handleTimeInputChange={handleTimeInputChange}/>)}
                 </div>
               </fieldset>
               <fieldset className="booking-form__date-section">
                 <legend className="booking-form__date-title">Завтра</legend>
                 <div className="booking-form__date-inner-wrapper">
-                  <label className="custom-radio booking-form__date">
-                    <input
-                      type="radio"
-                      id="tomorrow11h00m"
-                      name="date"
-                      required
-                      defaultValue="tomorrow11h00m"
-                    />
-                    <span className="custom-radio__label">11:00</span>
-                  </label>
-                  <label className="custom-radio booking-form__date">
-                    <input
-                      type="radio"
-                      id="tomorrow15h00m"
-                      name="date"
-                      required
-                      defaultValue="tomorrow15h00m"
-                      disabled
-                    />
-                    <span className="custom-radio__label">15:00</span>
-                  </label>
-                  <label className="custom-radio booking-form__date">
-                    <input
-                      type="radio"
-                      id="tomorrow17h30m"
-                      name="date"
-                      required
-                      defaultValue="tomorrow17h30m"
-                      disabled
-                    />
-                    <span className="custom-radio__label">17:30</span>
-                  </label>
-                  <label className="custom-radio booking-form__date">
-                    <input
-                      type="radio"
-                      id="tomorrow19h45m"
-                      name="date"
-                      required
-                      defaultValue="tomorrow19h45m"
-                    />
-                    <span className="custom-radio__label">19:45</span>
-                  </label>
-                  <label className="custom-radio booking-form__date">
-                    <input
-                      type="radio"
-                      id="tomorrow21h30m"
-                      name="date"
-                      required
-                      defaultValue="tomorrow21h30m"
-                    />
-                    <span className="custom-radio__label">21:30</span>
-                  </label>
+                  {bookingInfo.slots.tomorrow.map((it) => <TimeInput date='tomorrow' data={it} key={it.time} handleTimeInputChange={handleTimeInputChange}/>)}
                 </div>
               </fieldset>
             </fieldset>
@@ -173,10 +116,12 @@ function Booking() {
                 <input
                   type="text"
                   id="name"
-                  name="name"
+                  name="contactPerson"
                   placeholder="Имя"
                   required
                   pattern="[А-Яа-яЁёA-Za-z'- ]{1,}"
+                  onChange={handleFieldChange}
+                  value={formData.contactPerson}
                 />
               </div>
               <div className="custom-input booking-form__input">
@@ -186,10 +131,12 @@ function Booking() {
                 <input
                   type="tel"
                   id="tel"
-                  name="tel"
+                  name="phone"
                   placeholder="Телефон"
                   required
                   pattern="[0-9]{10,}"
+                  onChange={handleFieldChange}
+                  value={formData.phone}
                 />
               </div>
               <div className="custom-input booking-form__input">
@@ -199,17 +146,20 @@ function Booking() {
                 <input
                   type="number"
                   id="person"
-                  name="person"
+                  name="peopleCount"
                   placeholder="Количество участников"
                   required
+                  onChange={handleFieldChange}
+                  value={formData.peopleCount}
                 />
               </div>
               <label className="custom-checkbox booking-form__checkbox booking-form__checkbox--children">
                 <input
                   type="checkbox"
                   id="children"
-                  name="children"
-                  defaultChecked
+                  name="withChildren"
+                  onChange={handleFieldChange}
+                  checked={formData.withChildren}
                 />
                 <span className="custom-checkbox__icon">
                   <svg width={20} height={17} aria-hidden="true">
@@ -224,6 +174,7 @@ function Booking() {
             <button
               className="btn btn--accent btn--cta booking-form__submit"
               type="submit"
+              disabled={!agreementCheckboxChecked}
             >
               Забронировать
             </button>
@@ -233,6 +184,8 @@ function Booking() {
                 id="id-order-agreement"
                 name="user-agreement"
                 required
+                checked={agreementCheckboxChecked}
+                onChange={() => setAgreementCheckboxChecked(!agreementCheckboxChecked)}
               />
               <span className="custom-checkbox__icon">
                 <svg width={20} height={17} aria-hidden="true">
@@ -240,8 +193,8 @@ function Booking() {
                 </svg>
               </span>
               <span className="custom-checkbox__label">
-                Я&nbsp;согласен с
-                <a className="link link--active-silver link--underlined" href="#">
+                Я&nbsp;согласен с&nbsp;
+                <a className="link link--active-silver link--underlined" href="https://vk.com/volchkov_sergey" target="_blank" rel="noreferrer">
                   правилами обработки персональных данных
                 </a>
                 &nbsp;и пользовательским соглашением

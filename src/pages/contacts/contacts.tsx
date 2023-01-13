@@ -1,10 +1,14 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
 
 function Contacts() {
   return (
     <div className="wrapper">
+      <Helmet>
+        <title>Контакты - Escape Room</title>
+      </Helmet>
       <Header/>
       <main className="page-content decorated-page">
         <div className="decorated-page__decor" aria-hidden="true">

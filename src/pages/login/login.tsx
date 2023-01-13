@@ -1,10 +1,14 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
 
 function Login() {
   return (
     <div className="wrapper">
+      <Helmet>
+        <title>Авторизация - Escape Room</title>
+      </Helmet>
       <Header/>
       <main className="decorated-page login">
         <div className="decorated-page__decor" aria-hidden="true">

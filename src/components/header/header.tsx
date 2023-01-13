@@ -1,50 +1,66 @@
 import React from 'react';
+import { useLocation, Link } from 'react-router-dom';
+import { AppRoute } from '../../constants';
 
 function Header() {
+  const location = useLocation();
+
   return (
     <header className="header">
       <div className="container container--size-l">
-        <span className="logo header__logo">
-          <svg width={134} height={52} aria-hidden="true">
-            <use xlinkHref="#logo" />
-          </svg>
-        </span>
-        {/* TODO если главная, то то что выше
-
-        если нет, то ниже */}
-        {/* <a
+        {location.pathname === AppRoute.Root
+          ?
+          <span className="logo header__logo">
+            <svg width={134} height={52} aria-hidden="true">
+              <use xlinkHref="#logo" />
+            </svg>
+          </span>
+          :
+          <Link
             className="logo header__logo"
-            href="index.html"
+            to={AppRoute.Root}
             aria-label="Перейти на Главную"
           >
             <svg width={134} height={52} aria-hidden="true">
               <use xlinkHref="#logo" />
             </svg>
-          </a> */}
-
+          </Link>}
         <nav className="main-nav header__main-nav">
           <ul className="main-nav__list">
             <li className="main-nav__item">
-              <a className="link active" href="index.html">
+              <Link
+                className={location.pathname === AppRoute.Root ? 'link active' : 'link'}
+                to={AppRoute.Root}
+              >
               Квесты
-              </a>
+              </Link>
             </li>
             <li className="main-nav__item">
-              <a className="link" href="contacts.html">
+              <Link
+                className={location.pathname === AppRoute.About ? 'link active' : 'link'}
+                to={AppRoute.About}
+              >
               Контакты
-              </a>
+              </Link>
             </li>
             <li className="main-nav__item">
-              <a className="link" href="my-quests.html">
+              <Link
+                className={location.pathname === AppRoute.MyQuests ? 'link active' : 'link'}
+                to={AppRoute.MyQuests}
+              >
               Мои бронирования
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>
         <div className="header__side-nav">
-          <a className="btn btn--accent header__side-item" href="#">
+          <Link
+            className="btn btn--accent header__side-item"
+            to="#"
+          >
           Выйти
-          </a>
+            {/* TODO менять в зависимости от статуса авторизации*/}
+          </Link>
           <a
             className="link header__side-item header__phone-link"
             href="tel:88003335599"

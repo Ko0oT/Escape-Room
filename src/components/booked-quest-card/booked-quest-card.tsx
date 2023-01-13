@@ -1,13 +1,15 @@
 import React from 'react';
-import { DifficultyLevel } from '../../constants';
-import { Quest } from '../../types/types';
+import { BookedQuest } from '../../types/types';
 import { Link } from 'react-router-dom';
+import { DifficultyLevel, QuestDate } from '../../constants';
 
-type QuestCardProps = {
-  quest: Quest;
+type BookedQuestCardProps = {
+  bookedQuest: BookedQuest;
 }
 
-function QuestCard({quest}: QuestCardProps) {
+function BookedQuestCard({bookedQuest}: BookedQuestCardProps) {
+  const {quest} = bookedQuest;
+
   return (
     <div className="quest-card">
       <div className="quest-card__img">
@@ -32,6 +34,9 @@ function QuestCard({quest}: QuestCardProps) {
           >
             {quest.title}
           </Link>
+          <span className="quest-card__info">
+            {`[${QuestDate[bookedQuest.date]} ${bookedQuest.time}. ${bookedQuest.location ? bookedQuest.location.address : ''}]`}
+          </span>
         </div>
         <ul className="tags quest-card__tags">
           <li className="tags__item">
@@ -47,9 +52,15 @@ function QuestCard({quest}: QuestCardProps) {
             {DifficultyLevel[quest.level]}
           </li>
         </ul>
+        <button
+          className="btn btn--accent btn--secondary quest-card__btn"
+          type="button"
+        >
+          Отменить
+        </button>
       </div>
     </div>
   );
 }
 
-export default QuestCard;
+export default BookedQuestCard;
