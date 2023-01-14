@@ -8,9 +8,21 @@ import PrivateRoute from '../private-route/private-route';
 import NotFound from '../../pages/not-found/not-found';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import LoadingScreen from '../loading-screen/loading-screen';
+import { useAppSelector } from '../../hooks';
 
 function App(): JSX.Element {
+
+  const isQuestsDataLoading = useAppSelector((state) => state.isQuestsDataLoading);
+
+  if (isQuestsDataLoading) {
+    return (
+      <LoadingScreen />
+    );
+  }
+
   const hasAccess = true;
+
   return (
     <HelmetProvider>
       <BrowserRouter>

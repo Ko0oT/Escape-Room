@@ -1,0 +1,10 @@
+.loading-screen {
+  position: fixed;
+  top: 30px;
+  left: 30px;
+  padding: 5px 30px;
+  color: rgb(255, 255, 255);
+  border-radius: 5px;
+  border: 2px solid #f2890f;;
+  font-size: 20px;
+}

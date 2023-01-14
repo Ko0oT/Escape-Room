@@ -3,16 +3,9 @@ import QuestCard from '../../components/quest-card/quest-card';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import { Helmet } from 'react-helmet-async';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getAllQuests } from '../../store/action';
+import { useAppSelector } from '../../hooks';
 
 function Main() {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(getAllQuests());
-  }, [dispatch]);
-
   const quests = useAppSelector((state) => state.quests);
 
   const [state, setState] = useState({
@@ -20,6 +13,10 @@ function Main() {
     level: 'any',
     data: quests
   });
+
+  useEffect(() => {
+    setState({...state, data: quests});
+  }, [quests]);
 
   function handleFilterChange({ target: { name, id }}: ChangeEvent<HTMLFieldSetElement>) {
     setState((prev) => ({ ...prev, [name]: id }));

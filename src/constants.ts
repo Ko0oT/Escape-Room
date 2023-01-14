@@ -38,3 +38,13 @@ export const URL_MARKER_CURRENT =
 export const COMPANY_LOCATION: LatLngTuple = [59.968268, 30.317413];
 export const COMPANY_LOCATION_ZOOM = 17;
 export const DEFAULT_ZOOM = 10;
+
+export enum AuthorizationStatus {
+  Auth = 'AUTH',
+  NoAuth = 'NO_AUTH',
+  Unknown = 'UNKNOWN',
+}
+
+export enum APIRoute {
+  Quests = '/escape-room/quest',
+}

@@ -1,14 +1,23 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { quests } from './../mocks/data';
-import { getAllQuests } from './action';
+import { Quest } from '../types/types';
+import { loadQuests, setQuestsDataLoadingStatus } from './action';
 
-const initialState = {
-  quests: quests
+type InitialState = {
+  quests: Quest[];
+  isQuestsDataLoading: boolean;
+}
+
+const initialState: InitialState = {
+  quests: [],
+  isQuestsDataLoading: false
 };
 
 export const reducer = createReducer(initialState, (builfer) => {
   builfer
-    .addCase(getAllQuests, (state) => {
-      state.quests = quests;
+    .addCase(loadQuests, (state, action) => {
+      state.quests = action.payload;
+    })
+    .addCase(setQuestsDataLoadingStatus, (state, action) => {
+      state.isQuestsDataLoading = action.payload;
     });
 });
