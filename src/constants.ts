@@ -47,4 +47,6 @@ export enum AuthorizationStatus {
 
 export enum APIRoute {
   Quests = '/escape-room/quest',
+  Login = '/escape-room/login',
+  Logout = '/escape-room/logout'
 }

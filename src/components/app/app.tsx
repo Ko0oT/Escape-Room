@@ -14,14 +14,13 @@ import { useAppSelector } from '../../hooks';
 function App(): JSX.Element {
 
   const isQuestsDataLoading = useAppSelector((state) => state.isQuestsDataLoading);
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
 
   if (isQuestsDataLoading) {
     return (
       <LoadingScreen />
     );
   }
-
-  const hasAccess = true;
 
   return (
     <HelmetProvider>
@@ -46,7 +45,7 @@ function App(): JSX.Element {
           <Route
             path='/quest/:id/booking'
             element={
-              <PrivateRoute hasAccess={hasAccess}>
+              <PrivateRoute authorizationStatus={authorizationStatus}>
                 <Booking />
               </PrivateRoute>
             }
@@ -54,7 +53,7 @@ function App(): JSX.Element {
           <Route
             path='/my-quests'
             element={
-              <PrivateRoute hasAccess={hasAccess}>
+              <PrivateRoute authorizationStatus={authorizationStatus}>
                 <MyQuests />
               </PrivateRoute>
             }

@@ -1,13 +1,26 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
-import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
-
-//Страница доступна только неавторизованным пользователям. Если пользователь уже авторизован и попытается попасть на страницу входа, его перекинет на главную страницу каталога квестов.
-//TODO
+import { useForm } from 'react-hook-form';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useNavigate } from 'react-router-dom';
+import { AppRoute, AuthorizationStatus } from '../../constants';
+import { loginAction } from '../../store/api-action';
+import { AuthData } from '../../types/auth-data';
 
 function Login() {
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      navigate(AppRoute.Root);
+    }
+  }, [authorizationStatus, navigate]);
+
 
   const [agreementCheckboxChecked, setAgreementCheckboxChecked] = useState(false);
 
@@ -18,13 +31,12 @@ function Login() {
     },
     handleSubmit,
     reset
-  } = useForm({
+  } = useForm<AuthData>({
     mode: 'all'
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    // eslint-disable-next-line no-alert
-    alert(JSON.stringify(data));
+  const onSubmit = (data: AuthData) => {
+    dispatch(loginAction(data));
     reset();
   };
 
