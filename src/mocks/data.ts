@@ -7,7 +7,7 @@ export const quests: Quest[] = [
     previewImg: 'https://grading.design.pages.academy/static/quest/crypt.jpg',
     previewImgWebp: 'https://grading.design.pages.academy/static/quest/crypt.webp',
     level: 'hard',
-    type: 'horror',
+    type: 'adventures',
     peopleMinMax: [
       2,
       5

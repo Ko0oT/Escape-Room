@@ -1,11 +1,38 @@
-import React from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import QuestCard from '../../components/quest-card/quest-card';
 import Header from '../../components/header/header';
-import { quests } from './../../mocks/data';
 import Footer from '../../components/footer/footer';
 import { Helmet } from 'react-helmet-async';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getAllQuests } from '../../store/action';
 
 function Main() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getAllQuests());
+  }, [dispatch]);
+
+  const quests = useAppSelector((state) => state.quests);
+
+  const [state, setState] = useState({
+    type: 'all',
+    level: 'any',
+    data: quests
+  });
+
+  function handleFilterChange({ target: { name, id }}: ChangeEvent<HTMLFieldSetElement>) {
+    setState((prev) => ({ ...prev, [name]: id }));
+  }
+
+  let data = state.data;
+  if (state.type !== 'all') {
+    data = data.filter((d) => d.type === state.type);
+  }
+  if (state.level !== 'any') {
+    data = data.filter((d) => d.level === state.level);
+  }
+
   return (
     <div className="wrapper">
       <Helmet>
@@ -24,7 +51,7 @@ function Main() {
           </div>
           <div className="page-content__item">
             <form className="filter" action="#" method="get">
-              <fieldset className="filter__section">
+              <fieldset className="filter__section" onChange={handleFilterChange}>
                 <legend className="visually-hidden">Тематика</legend>
                 <ul className="filter__list">
                   <li className="filter__item">
@@ -47,8 +74,8 @@ function Main() {
                     </label>
                   </li>
                   <li className="filter__item">
-                    <input type="radio" name="type" id="adventure" />
-                    <label className="filter__label" htmlFor="adventure">
+                    <input type="radio" name="type" id="adventures"/>
+                    <label className="filter__label" htmlFor="adventures">
                       <svg
                         className="filter__icon"
                         width={36}
@@ -103,8 +130,8 @@ function Main() {
                     </label>
                   </li>
                   <li className="filter__item">
-                    <input type="radio" name="type" id="sciFi" />
-                    <label className="filter__label" htmlFor="sciFi">
+                    <input type="radio" name="type" id="sci-fi" />
+                    <label className="filter__label" htmlFor="sci-fi">
                       <svg
                         className="filter__icon"
                         width={28}
@@ -118,7 +145,7 @@ function Main() {
                   </li>
                 </ul>
               </fieldset>
-              <fieldset className="filter__section">
+              <fieldset className="filter__section" onChange={handleFilterChange}>
                 <legend className="visually-hidden">Сложность</legend>
                 <ul className="filter__list">
                   <li className="filter__item">
@@ -139,8 +166,8 @@ function Main() {
                     </label>
                   </li>
                   <li className="filter__item">
-                    <input type="radio" name="level" id="middle" />
-                    <label className="filter__label" htmlFor="middle">
+                    <input type="radio" name="level" id="medium" />
+                    <label className="filter__label" htmlFor="medium">
                       <span className="filter__label-text">Средний</span>
                     </label>
                   </li>
@@ -156,7 +183,7 @@ function Main() {
           </div>
           <h2 className="title visually-hidden">Выберите квест</h2>
           <div className="cards-grid">
-            {quests.map((quest) => <QuestCard quest={quest} key={quest.id}/>)}
+            {data.length ? data.map((quest) => <QuestCard quest={quest} key={quest.id}/>) : <p style={{fontSize: 30}}>Нет подходящих квестов</p>}
           </div>
         </div>
       </main>
