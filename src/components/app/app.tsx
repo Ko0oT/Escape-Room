@@ -3,7 +3,7 @@ import Booking from '../../pages/booking/booking';
 import Contacts from '../../pages/contacts/contacts';
 import Login from '../../pages/login/login';
 import MyQuests from '../../pages/my-quests/my-quests';
-import Quest from '../../pages/quest/quest';
+import QuestPage from '../../pages/quest/quest-page';
 import PrivateRoute from '../private-route/private-route';
 import NotFound from '../../pages/not-found/not-found';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -36,7 +36,7 @@ function App(): JSX.Element {
           />
           <Route
             path='/quest/:id'
-            element={<Quest />}
+            element={<QuestPage />}
           />
           <Route
             path='/about'
@@ -57,6 +57,10 @@ function App(): JSX.Element {
                 <MyQuests />
               </PrivateRoute>
             }
+          />
+          <Route
+            path='/404'
+            element={<NotFound />}
           />
           <Route
             path='*'

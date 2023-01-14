@@ -1,31 +1,45 @@
 import { LeafletMouseEvent } from 'leaflet';
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
 import Map from '../../components/map/map';
 import TimeInput from '../../components/time-input/time-input';
-import { bookingInfo, someQuest as quest } from '../../mocks/data';
-import { FormControllableInput, Location } from '../../types/types';
-import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
-import { QuestDate } from '../../constants';
-//данные берутся из 2х запросов сразу
+import { BookedQuest, BookingInfo, ExtendedQuest, FormControllableInput, FormUncontrollableInput, Location } from '../../types/types';
+import { useForm } from 'react-hook-form';
+import { APIRoute, AppRoute, QuestDate } from '../../constants';
+import { createAPI } from '../../services/api';
+import LoadingScreen from '../../components/loading-screen/loading-screen';
 
 function Booking() {
   const {id} = useParams();
+  const api = createAPI();
+  const navigate = useNavigate();
+
+  const [quest, setQuest] = useState<ExtendedQuest | null>(null);
+  const [bookingInfo, setBookingInfo] = useState<BookingInfo | null>(null);
+
+  useEffect(() => {
+    api.get<ExtendedQuest>(`${APIRoute.Quests}/${id as string}`)
+      .then((response) => setQuest(response.data))
+      .catch(() => navigate(AppRoute.NotFound));
+    api.get<BookingInfo>(`${APIRoute.Quests}/${id as string}/booking`)
+      .then((response) => setBookingInfo(response.data))
+      .catch(() => navigate(AppRoute.NotFound));
+  }, []);
 
   const initialFormState: FormControllableInput = {
     date: undefined,
     time: undefined,
     locationId: undefined,
-    questId: Number(id)
+    questId: Number(id),
+    id: Number(id),
   };
 
   const [location, setLocation] = useState<Location | undefined>(undefined);
   const [formData, setFormData] = useState<FormControllableInput>(initialFormState);
   const [agreementCheckboxChecked, setAgreementCheckboxChecked] = useState(false);
-
 
   const {
     register,
@@ -34,19 +48,19 @@ function Booking() {
     },
     handleSubmit,
     reset
-  } = useForm({
+  } = useForm<FormUncontrollableInput>({
     mode: 'all'
   });
 
-  //наш обработчик, обрабатывается если нет ошибок
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    // eslint-disable-next-line no-alert
-    alert(JSON.stringify({...data, ...formData}));
-    reset();
+  const onSubmit = (data: FormUncontrollableInput) => {
+    api.post<BookedQuest>(`${APIRoute.Quests}/${id as string}/booking`, {...data, ...formData})
+      .then(() => reset())
+      .then(() => navigate(AppRoute.MyQuests))
+      .catch(() => navigate(AppRoute.NotFound));
   };
 
   const handleSelectedMarkerChange = ({latlng}: LeafletMouseEvent) => {
-    const checkedLocation: Location | undefined = bookingInfo.locations.find((it) => it.coords[0] === latlng.lat && it.coords[1] === latlng.lng);
+    const checkedLocation: Location | undefined = bookingInfo?.locations.find((it) => it.coords[0] === latlng.lat && it.coords[1] === latlng.lng);
     setFormData({
       ...formData,
       locationId: checkedLocation?.id,
@@ -61,6 +75,10 @@ function Booking() {
       time: target.value,
     });
   };
+
+  if (quest === null || bookingInfo === null) {
+    return (<LoadingScreen />);
+  }
 
   return (
     <div className="wrapper">
@@ -176,6 +194,7 @@ function Booking() {
                 </label>
                 <input
                   {...register('peopleCount', {
+                    valueAsNumber: true,
                     required: 'Поле обязателько к заполнению',
                     min: {
                       value: quest.peopleMinMax[0],

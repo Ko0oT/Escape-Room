@@ -25,7 +25,8 @@ export const AppRoute = {
   MyQuests: '/my-quests',
   Quest: '/quest/:id',
   Booking: '/quest/:id/booking',
-  About: '/about'
+  About: '/about',
+  NotFound:'/404'
 } as const;
 
 export const URL_MARKER_DEFAULT =

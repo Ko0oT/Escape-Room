@@ -61,4 +61,12 @@ export type FormControllableInput = {
   time: string | undefined;
   locationId: number | undefined;
   questId: number;
+  id: number;
+}
+
+export type FormUncontrollableInput = {
+  contactPerson: string;
+  phone: string;
+  withChildren: boolean;
+  peopleCount: number;
 }

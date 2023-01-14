@@ -1,12 +1,30 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
-import { someQuest as quest } from '../../mocks/data';
-import { Link } from 'react-router-dom';
-import { DifficultyLevel, QuestGenre } from '../../constants';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { APIRoute, AppRoute, DifficultyLevel, QuestGenre } from '../../constants';
 import { Helmet } from 'react-helmet-async';
+import { createAPI } from '../../services/api';
+import { ExtendedQuest } from '../../types/types';
+import LoadingScreen from '../../components/loading-screen/loading-screen';
 
-function Quest() {
+function QuestPage() {
+  const api = createAPI();
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const [quest, setQuest] = useState<ExtendedQuest | null>(null);
+
+  useEffect(() => {
+    api.get<ExtendedQuest>(`${APIRoute.Quests}/${id as string}`)
+      .then((response) => setQuest(response.data))
+      .catch(() => navigate(AppRoute.NotFound));
+  }, []);
+
+  if (quest === null) {
+    return (<LoadingScreen />);
+  }
+
   return (
     <div className="wrapper">
       <Helmet>
@@ -67,4 +85,4 @@ function Quest() {
   );
 }
 
-export default Quest;
+export default QuestPage;
