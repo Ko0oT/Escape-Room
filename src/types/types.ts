@@ -56,13 +56,9 @@ export type BookingInfo = {
   slots: Slots;
 }
 
-export type FormData = {
+export type FormControllableInput = {
   date: 'today' | 'tomorrow' | undefined;
-  time: string;
-  contactPerson: string;
-  phone: string;
-  withChildren: boolean;
-  peopleCount: number | undefined;
+  time: string | undefined;
   locationId: number | undefined;
   questId: number;
 }

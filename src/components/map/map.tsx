@@ -54,7 +54,7 @@ function Map({locations, handleSelectedMarkerChange, selectedLocationId}: MapPro
   }
 
   return (
-    <MapContainer center={locations ? locations[0].coords : COMPANY_LOCATION} zoom={locations ? DEFAULT_ZOOM : COMPANY_LOCATION_ZOOM} scrollWheelZoom={false} style={{height: '100%'}}>
+    <MapContainer center={COMPANY_LOCATION} zoom={locations ? DEFAULT_ZOOM : COMPANY_LOCATION_ZOOM} scrollWheelZoom={false} style={{height: '100%'}}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"

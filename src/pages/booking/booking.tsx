@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { LeafletMouseEvent } from 'leaflet';
 import { useState, ChangeEvent } from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -8,45 +7,42 @@ import Header from '../../components/header/header';
 import Map from '../../components/map/map';
 import TimeInput from '../../components/time-input/time-input';
 import { bookingInfo, someQuest as quest } from '../../mocks/data';
-import { FormData, Location } from '../../types/types';
-import { QuestDate } from './../../constants';
-// import { useForm } from 'react-hook-form';
+import { FormControllableInput, Location } from '../../types/types';
+import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
+import { QuestDate } from '../../constants';
 //данные берутся из 2х запросов сразу
 
 function Booking() {
   const {id} = useParams();
 
-  const initialFormState: FormData = {
+  const initialFormState: FormControllableInput = {
     date: undefined,
-    time: '',
-    contactPerson: '',
-    phone: '',
-    withChildren: true,
-    peopleCount: undefined,
+    time: undefined,
     locationId: undefined,
     questId: Number(id)
   };
 
   const [location, setLocation] = useState<Location | undefined>(undefined);
-  const [formData, setFormData] = useState<FormData>(initialFormState);
+  const [formData, setFormData] = useState<FormControllableInput>(initialFormState);
   const [agreementCheckboxChecked, setAgreementCheckboxChecked] = useState(false);
-  // const [formIsValid, setFormIsValid] = useState(false); TODO доделать валидацию
 
-  const handleTimeInputChange = ({target}: ChangeEvent<HTMLInputElement>): void => {
-    setFormData({
-      ...formData,
-      date: target.id as keyof typeof QuestDate,
-      time: target.value,
-    });
-  };
 
-  const handleFieldChange = ({target}: ChangeEvent<HTMLInputElement>): void => {
-    const {name} = target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+  const {
+    register,
+    formState: {
+      errors, isValid
+    },
+    handleSubmit,
+    reset
+  } = useForm({
+    mode: 'all'
+  });
+
+  //наш обработчик, обрабатывается если нет ошибок
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    // eslint-disable-next-line no-alert
+    alert(JSON.stringify({...data, ...formData}));
+    reset();
   };
 
   const handleSelectedMarkerChange = ({latlng}: LeafletMouseEvent) => {
@@ -58,9 +54,13 @@ function Booking() {
     setLocation(checkedLocation as Location);
   };
 
-  // const onSubmit = (evt) => evt.preventDefault();
-  // const { register, handleSubmit } = useForm();
-
+  const handleTimeInputChange = ({target}: ChangeEvent<HTMLInputElement>): void => {
+    setFormData({
+      ...formData,
+      date: target.id as keyof typeof QuestDate,
+      time: target.value,
+    });
+  };
 
   return (
     <div className="wrapper">
@@ -100,15 +100,14 @@ function Booking() {
                 </div>
               </div>
               <p className="booking-map__address">
-                Вы&nbsp;выбрали: {location?.address}
+                {location === undefined ? 'Выберите локацию!' : `Вы выбрали: ${location.address}`}
               </p>
             </div>
           </div>
           <form
-            // onSubmit={handleSubmit(onSubmit)}
             className="booking-form"
-            action="https://echo.htmlacademy.ru/"
-            method="post"
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
+            onSubmit={handleSubmit(onSubmit)}
           >
             <fieldset className="booking-form__section">
               <legend className="visually-hidden">Выбор даты и времени</legend>
@@ -132,52 +131,74 @@ function Booking() {
                   Ваше имя
                 </label>
                 <input
+                  {...register('contactPerson', {
+                    required: 'Поле обязателько к заполнению',
+                    maxLength: {
+                      value: 15,
+                      message: 'Максимум 15 символов'
+                    },
+                    pattern: {
+                      value: /^([А-Яа-яЁёA-Za-z '-]{1,})$/,
+                      message: 'Допустимы только буквы и спецсимволы'
+                    }
+                  })}
                   type="text"
                   id="name"
-                  name="contactPerson"
                   placeholder="Имя"
-                  required
-                  pattern="[А-Яа-яЁёA-Za-z'- ]{1,}"
-                  onChange={handleFieldChange}
-                  value={formData.contactPerson}
                 />
+                <div style={{height: 40}}>
+                  {errors?.contactPerson && <p>{errors?.contactPerson?.message as string}</p>}
+                </div>
               </div>
               <div className="custom-input booking-form__input">
                 <label className="custom-input__label" htmlFor="tel">
                   Контактный телефон
                 </label>
                 <input
+                  {...register('phone', {
+                    required: 'Поле обязателько к заполнению',
+                    pattern: {
+                      value: /^(?:\+7|8)?9(?:\d{9})$/,
+                      message: 'Введите телефон в формате 8 999 999 99 99'
+                    }
+                  })}
                   type="tel"
                   id="tel"
-                  name="phone"
                   placeholder="Телефон"
-                  required
-                  pattern="[0-9]{10,}"
-                  onChange={handleFieldChange}
-                  value={formData.phone}
                 />
+                <div style={{height: 40}}>
+                  {errors?.phone && <p>{errors?.phone?.message as string}</p>}
+                </div>
               </div>
               <div className="custom-input booking-form__input">
                 <label className="custom-input__label" htmlFor="person">
                   Количество участников
                 </label>
                 <input
+                  {...register('peopleCount', {
+                    required: 'Поле обязателько к заполнению',
+                    min: {
+                      value: quest.peopleMinMax[0],
+                      message: 'Недопустимый минимум участников'
+                    },
+                    max: {
+                      value: quest.peopleMinMax[1],
+                      message: 'Недопустимый максимум участников'
+                    },
+                  })}
                   type="number"
                   id="person"
-                  name="peopleCount"
                   placeholder="Количество участников"
-                  required
-                  onChange={handleFieldChange}
-                  value={formData.peopleCount}
                 />
+                <div style={{height: 40}}>
+                  {errors?.peopleCount && <p>{errors?.peopleCount?.message as string}</p>}
+                </div>
               </div>
               <label className="custom-checkbox booking-form__checkbox booking-form__checkbox--children">
                 <input
+                  {...register('withChildren')}
                   type="checkbox"
                   id="children"
-                  name="withChildren"
-                  onChange={handleFieldChange}
-                  checked={formData.withChildren}
                 />
                 <span className="custom-checkbox__icon">
                   <svg width={20} height={17} aria-hidden="true">
@@ -192,7 +213,7 @@ function Booking() {
             <button
               className="btn btn--accent btn--cta booking-form__submit"
               type="submit"
-              disabled={!agreementCheckboxChecked}
+              disabled={!isValid || !location || !formData.date || !formData.time || !agreementCheckboxChecked}
             >
               Забронировать
             </button>
