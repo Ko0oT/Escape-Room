@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BookedQuest } from '../../types/types';
 import { Link, useNavigate } from 'react-router-dom';
 import { APIRoute, AppRoute, DifficultyLevel, QuestDate } from '../../constants';
@@ -15,11 +15,14 @@ function BookedQuestCard({bookedQuest, onUpdateHandler}: BookedQuestCardProps) {
   const api = createAPI();
   const navigate = useNavigate();
 
+  const [isSendingData, setIsSendingData] = useState(false);
 
   const handleDeteleBookingButtonClick = () => {
+    setIsSendingData(true);
     api.delete(`${APIRoute.Booked}/${id}`)
       .then(() => onUpdateHandler())
-      .catch(() => navigate(AppRoute.NotFound));
+      .catch(() => navigate(AppRoute.NotFound))
+      .finally(() => setIsSendingData(false));
   };
 
   return (
@@ -68,8 +71,9 @@ function BookedQuestCard({bookedQuest, onUpdateHandler}: BookedQuestCardProps) {
           className="btn btn--accent btn--secondary quest-card__btn"
           type="button"
           onClick={handleDeteleBookingButtonClick}
+          disabled={isSendingData}
         >
-          Отменить
+          {isSendingData ? 'Отменяю...' : 'Отменить'}
         </button>
       </div>
     </div>

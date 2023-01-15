@@ -4,10 +4,7 @@ import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import App from './components/app/app';
 import { store } from './store';
-import { checkAuth, fetchQuestAction } from './store/api-action';
-
-store.dispatch(fetchQuestAction());
-store.dispatch(checkAuth());
+import 'react-toastify/dist/ReactToastify.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,

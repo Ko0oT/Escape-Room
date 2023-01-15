@@ -19,6 +19,7 @@ function Booking() {
 
   const [quest, setQuest] = useState<ExtendedQuest | null>(null);
   const [bookingInfo, setBookingInfo] = useState<BookingInfo | null>(null);
+  const [isSendingData, setIsSendingData] = useState(false);
 
   useEffect(() => {
     api.get<ExtendedQuest>(`${APIRoute.Quests}/${id as string}`)
@@ -53,10 +54,12 @@ function Booking() {
   });
 
   const onSubmit = (data: FormUncontrollableInput) => {
+    setIsSendingData(true);
     api.post<BookedQuest>(`${APIRoute.Quests}/${id as string}/booking`, {...data, ...formData})
       .then(() => reset())
       .then(() => navigate(AppRoute.MyQuests))
-      .catch(() => navigate(AppRoute.NotFound));
+      .catch(() => navigate(AppRoute.NotFound))
+      .finally(() => setIsSendingData(false));
   };
 
   const handleSelectedMarkerChange = ({latlng}: LeafletMouseEvent) => {
@@ -118,7 +121,11 @@ function Booking() {
                 </div>
               </div>
               <p className="booking-map__address">
-                {location === undefined ? 'Выберите локацию!' : `Вы выбрали: ${location.address}`}
+                {location === undefined
+                  ?
+                  <span style={{color: '#f2890f'}}>Выберите локацию!</span>
+                  :
+                  `Вы выбрали: ${location.address}`}
               </p>
             </div>
           </div>
@@ -232,9 +239,9 @@ function Booking() {
             <button
               className="btn btn--accent btn--cta booking-form__submit"
               type="submit"
-              disabled={!isValid || !location || !formData.date || !formData.time || !agreementCheckboxChecked}
+              disabled={!isValid || !location || !formData.date || !formData.time || !agreementCheckboxChecked || isSendingData}
             >
-              Забронировать
+              {isSendingData ? 'Бронирую...' : 'Забронировать'}
             </button>
             <label className="custom-checkbox booking-form__checkbox booking-form__checkbox--agreement">
               <input

@@ -9,9 +9,18 @@ import NotFound from '../../pages/not-found/not-found';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import LoadingScreen from '../loading-screen/loading-screen';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useEffect } from 'react';
+import { checkAuth, fetchQuestAction } from '../../store/api-action';
 
 function App(): JSX.Element {
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchQuestAction());
+    dispatch(checkAuth());
+  }, []);
 
   const isQuestsDataLoading = useAppSelector((state) => state.isQuestsDataLoading);
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
