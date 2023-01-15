@@ -3,7 +3,7 @@ import Booking from '../../pages/booking/booking';
 import Contacts from '../../pages/contacts/contacts';
 import Login from '../../pages/login/login';
 import MyQuests from '../../pages/my-quests/my-quests';
-import QuestPage from '../../pages/quest/quest-page';
+import QuestPage from '../../pages/quest-page/quest-page';
 import PrivateRoute from '../private-route/private-route';
 import NotFound from '../../pages/not-found/not-found';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';

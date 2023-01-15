@@ -1,14 +1,26 @@
 import React from 'react';
 import { BookedQuest } from '../../types/types';
-import { Link } from 'react-router-dom';
-import { DifficultyLevel, QuestDate } from '../../constants';
+import { Link, useNavigate } from 'react-router-dom';
+import { APIRoute, AppRoute, DifficultyLevel, QuestDate } from '../../constants';
+import { createAPI } from '../../services/api';
 
 type BookedQuestCardProps = {
   bookedQuest: BookedQuest;
+  onUpdateHandler: () => void;
 }
 
-function BookedQuestCard({bookedQuest}: BookedQuestCardProps) {
-  const {quest} = bookedQuest;
+function BookedQuestCard({bookedQuest, onUpdateHandler}: BookedQuestCardProps) {
+  const {quest, id} = bookedQuest;
+
+  const api = createAPI();
+  const navigate = useNavigate();
+
+
+  const handleDeteleBookingButtonClick = () => {
+    api.delete(`${APIRoute.Booked}/${id}`)
+      .then(() => onUpdateHandler())
+      .catch(() => navigate(AppRoute.NotFound));
+  };
 
   return (
     <div className="quest-card">
@@ -55,6 +67,7 @@ function BookedQuestCard({bookedQuest}: BookedQuestCardProps) {
         <button
           className="btn btn--accent btn--secondary quest-card__btn"
           type="button"
+          onClick={handleDeteleBookingButtonClick}
         >
           Отменить
         </button>

@@ -15,7 +15,15 @@ function Main() {
   });
 
   useEffect(() => {
-    setState({...state, data: quests});
+    let isMounted = true;
+
+    if (isMounted) {
+      setState({...state, data: quests});
+    }
+
+    return () => {
+      isMounted = false;
+    };
   }, [quests]);
 
   function handleFilterChange({ target: { name, id }}: ChangeEvent<HTMLFieldSetElement>) {
