@@ -47,8 +47,7 @@ function Booking() {
     formState: {
       errors, isValid
     },
-    handleSubmit,
-    reset
+    handleSubmit
   } = useForm<FormUncontrollableInput>({
     mode: 'all'
   });
@@ -56,9 +55,7 @@ function Booking() {
   const onSubmit = (data: FormUncontrollableInput) => {
     setIsSendingData(true);
     api.post<BookedQuest>(`${APIRoute.Quests}/${id as string}/booking`, {...data, ...formData})
-      .then(() => reset())
       .then(() => navigate(AppRoute.MyQuests))
-      .catch(() => navigate(AppRoute.NotFound))
       .finally(() => setIsSendingData(false));
   };
 

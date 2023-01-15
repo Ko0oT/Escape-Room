@@ -1,4 +1,5 @@
 import { LatLngTuple } from 'leaflet';
+import { Location as LocationRouter } from 'react-router-dom';
 import {DifficultyLevel, QuestDate, QuestGenre} from './../constants';
 
 export type Location = {
@@ -70,3 +71,9 @@ export type FormUncontrollableInput = {
   withChildren: boolean;
   peopleCount: number;
 }
+
+export type LocationProps = {
+  state: {
+    from: LocationRouter;
+  };
+};

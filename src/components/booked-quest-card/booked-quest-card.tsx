@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { BookedQuest } from '../../types/types';
-import { Link, useNavigate } from 'react-router-dom';
-import { APIRoute, AppRoute, DifficultyLevel, QuestDate } from '../../constants';
+import { Link } from 'react-router-dom';
+import { APIRoute, DifficultyLevel, QuestDate } from '../../constants';
 import { createAPI } from '../../services/api';
 
 type BookedQuestCardProps = {
@@ -13,7 +13,6 @@ function BookedQuestCard({bookedQuest, onUpdateHandler}: BookedQuestCardProps) {
   const {quest, id} = bookedQuest;
 
   const api = createAPI();
-  const navigate = useNavigate();
 
   const [isSendingData, setIsSendingData] = useState(false);
 
@@ -21,7 +20,6 @@ function BookedQuestCard({bookedQuest, onUpdateHandler}: BookedQuestCardProps) {
     setIsSendingData(true);
     api.delete(`${APIRoute.Booked}/${id}`)
       .then(() => onUpdateHandler())
-      .catch(() => navigate(AppRoute.NotFound))
       .finally(() => setIsSendingData(false));
   };
 

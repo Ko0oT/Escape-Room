@@ -4,41 +4,42 @@ import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
 import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../constants';
 import { loginAction } from '../../store/api-action';
 import { AuthData } from '../../types/auth-data';
+import { LocationProps } from '../../types/types';
 
 function Login() {
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
-
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation() as unknown as LocationProps;
+  const from = location.state?.from?.pathname || AppRoute.Root;
+  const [agreementCheckboxChecked, setAgreementCheckboxChecked] = useState(false);
+
 
   useEffect(() => {
     if (authorizationStatus === AuthorizationStatus.Auth) {
-      navigate(AppRoute.Root);
+      navigate(from);
     }
-  }, [authorizationStatus, navigate]);
+  }, [authorizationStatus]);
 
-
-  const [agreementCheckboxChecked, setAgreementCheckboxChecked] = useState(false);
 
   const {
     register,
     formState: {
       errors, isValid
     },
-    handleSubmit,
-    reset
+    handleSubmit
   } = useForm<AuthData>({
     mode: 'all'
   });
 
   const onSubmit = (data: AuthData) => {
     dispatch(loginAction(data));
-    reset();
   };
+
 
   return (
     <div className="wrapper">
@@ -100,8 +101,8 @@ function Login() {
                       {...register('password', {
                         required: 'Поле обязателько к заполнению',
                         pattern: {
-                          value: /^(?=.*\d)(?=.*[A-Za-zА-Яа-яЁё])([^\s]){2,}$/,
-                          message: 'Пароль должен содержать как минимум одну букву и цифру без пробелов'
+                          value: /^(?=.*\d)(?=.*[A-Za-zА-Яа-яЁё])([^\s]){3,}$/,
+                          message: 'Пароль должен содержать как минимум одну букву и цифру без пробелов, минимальная длина 3 символа'
                         }
                       })}
                       type="password"
