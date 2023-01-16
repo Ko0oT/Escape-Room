@@ -2,19 +2,19 @@ import React from 'react';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L, { LeafletMouseEvent } from 'leaflet';
-import { COMPANY_LOCATION, COMPANY_LOCATION_ZOOM, DEFAULT_ZOOM, URL_MARKER_CURRENT, URL_MARKER_DEFAULT } from '../../constants';
+import { COMPANY_LOCATION, COMPANY_LOCATION_ZOOM, DEFAULT_ZOOM } from '../../constants';
 import { Location } from '../../types/types';
 
 const defaultCustomIcon = L.icon({
-  iconUrl: URL_MARKER_DEFAULT,
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
+  iconUrl: '/img/svg/pin-default.svg',
+  iconSize: [23, 42],
+  iconAnchor: [11.5, 42],
 });
 
 const currentCustomIcon = L.icon({
-  iconUrl: URL_MARKER_CURRENT,
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
+  iconUrl: '/img/svg/pin-active.svg',
+  iconSize: [23, 42],
+  iconAnchor: [11.5, 42],
 });
 
 type MapProps = {
