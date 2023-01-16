@@ -3,6 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { logoutAction } from '../../store/api-action';
+import { getAuthorizationStatus } from '../../store/user-process/user-process-selectors';
 
 function Header() {
   const location = useLocation();
@@ -10,7 +11,7 @@ function Header() {
   const isLoginPage = location.pathname === AppRoute.Login;
 
   const dispatch = useAppDispatch();
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   const handleSignOutClick = () => {
     dispatch(logoutAction());

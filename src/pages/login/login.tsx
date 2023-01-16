@@ -9,9 +9,10 @@ import { AppRoute, AuthorizationStatus } from '../../constants';
 import { loginAction } from '../../store/api-action';
 import { AuthData } from '../../types/auth-data';
 import { LocationProps } from '../../types/types';
+import { getAuthorizationStatus } from '../../store/user-process/user-process-selectors';
 
 function Login() {
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation() as unknown as LocationProps;

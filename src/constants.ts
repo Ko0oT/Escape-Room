@@ -52,3 +52,8 @@ export enum APIRoute {
   Logout = '/escape-room/logout',
   Booked = '/escape-room/reservation'
 }
+
+export enum NameSpace {
+  Data = 'DATA',
+  User = 'USER',
+}

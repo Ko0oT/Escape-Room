@@ -11,19 +11,21 @@ import { HelmetProvider } from 'react-helmet-async';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useEffect } from 'react';
-import { checkAuth, fetchQuestAction } from '../../store/api-action';
+import { checkAuthAction, fetchQuestsAction } from '../../store/api-action';
+import { getQuestsDataLoadingStatus } from '../../store/app-data/app-data-selectors';
+import { getAuthorizationStatus } from '../../store/user-process/user-process-selectors';
 
 function App(): JSX.Element {
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchQuestAction());
-    dispatch(checkAuth());
+    dispatch(fetchQuestsAction());
+    dispatch(checkAuthAction());
   }, []);
 
-  const isQuestsDataLoading = useAppSelector((state) => state.isQuestsDataLoading);
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const isQuestsDataLoading = useAppSelector(getQuestsDataLoadingStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   if (isQuestsDataLoading) {
     return (

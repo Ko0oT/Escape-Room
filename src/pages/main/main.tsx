@@ -4,9 +4,10 @@ import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import { Helmet } from 'react-helmet-async';
 import { useAppSelector } from '../../hooks';
+import { getQuests } from '../../store/app-data/app-data-selectors';
 
 function Main() {
-  const quests = useAppSelector((state) => state.quests);
+  const quests = useAppSelector(getQuests);
 
   const [state, setState] = useState({
     type: 'all',
